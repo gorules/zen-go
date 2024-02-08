@@ -21,7 +21,6 @@ func EvaluateExpression[T any](expression string, context any) (T, error) {
 
 	contextCString := C.CString(string(jsonData))
 	defer C.free(unsafe.Pointer(contextCString))
-	defer C.free(unsafe.Pointer(contextCString))
 
 	resultPtr := C.zen_evaluate_expression(expressionCString, contextCString)
 	if resultPtr.error > 0 {
