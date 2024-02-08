@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TestZenDecision_EvaluateWithOpts(t *testing.T) {
-	zenEngine := zen.NewEngine(readTestFile)
-	defer zenEngine.Dispose()
+func TestDecision_EvaluateWithOpts(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
 	for _, data := range testData {
-		decision, err := zenEngine.GetDecision(data.file)
+		decision, err := engine.GetDecision(data.file)
 		assert.NoError(t, err)
 
 		var inputJson any
@@ -32,13 +32,13 @@ func TestZenDecision_EvaluateWithOpts(t *testing.T) {
 	}
 }
 
-func TestZenDecision_Evaluate(t *testing.T) {
-	zenEngine := zen.NewEngine(readTestFile)
-	defer zenEngine.Dispose()
+func TestDecision_Evaluate(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
 	for _, data := range testData {
-		decision, err := zenEngine.GetDecision(data.file)
+		decision, err := engine.GetDecision(data.file)
 		assert.NoError(t, err)
 
 		var inputJson any

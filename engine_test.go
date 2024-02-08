@@ -57,19 +57,19 @@ func prepareEvaluationTestData() map[string]evaluateTestData {
 	}
 }
 
-func TestZenEngine_NewEngine(t *testing.T) {
-	zenEngineWithLoader := zen.NewEngine(readTestFile)
-	defer zenEngineWithLoader.Dispose()
-	assert.NotNil(t, zenEngineWithLoader)
+func TestEngine_NewEngine(t *testing.T) {
+	engineWithLoader := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engineWithLoader.Dispose()
+	assert.NotNil(t, engineWithLoader)
 
-	zenEngineWithoutLoader := zen.NewEngine(nil)
-	defer zenEngineWithoutLoader.Dispose()
-	assert.NotNil(t, zenEngineWithoutLoader)
+	engineWithoutLoader := zen.NewEngine(zen.EngineConfig{})
+	defer engineWithoutLoader.Dispose()
+	assert.NotNil(t, engineWithoutLoader)
 }
 
-func TestZenEngine_Evaluate(t *testing.T) {
-	zenEngine := zen.NewEngine(readTestFile)
-	defer zenEngine.Dispose()
+func TestEngine_Evaluate(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
 	for _, data := range testData {
@@ -77,7 +77,7 @@ func TestZenEngine_Evaluate(t *testing.T) {
 		err := json.Unmarshal([]byte(data.inputJson), &inputJson)
 		assert.NoError(t, err)
 
-		output, err := zenEngine.Evaluate(data.file, inputJson)
+		output, err := engine.Evaluate(data.file, inputJson)
 		assert.NoError(t, err)
 		assert.Nil(t, output.Trace)
 
@@ -88,9 +88,9 @@ func TestZenEngine_Evaluate(t *testing.T) {
 	}
 }
 
-func TestZenEngine_EvaluateWithOpts(t *testing.T) {
-	zenEngine := zen.NewEngine(readTestFile)
-	defer zenEngine.Dispose()
+func TestEngine_EvaluateWithOpts(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
 	for _, data := range testData {
@@ -98,7 +98,7 @@ func TestZenEngine_EvaluateWithOpts(t *testing.T) {
 		err := json.Unmarshal([]byte(data.inputJson), &inputJson)
 		assert.NoError(t, err)
 
-		output, err := zenEngine.EvaluateWithOpts(data.file, inputJson, zen.EvaluationOptions{
+		output, err := engine.EvaluateWithOpts(data.file, inputJson, zen.EvaluationOptions{
 			Trace:    true,
 			MaxDepth: 10,
 		})
@@ -112,13 +112,13 @@ func TestZenEngine_EvaluateWithOpts(t *testing.T) {
 	}
 }
 
-func TestZenEngine_GetDecision(t *testing.T) {
-	zenEngine := zen.NewEngine(readTestFile)
-	defer zenEngine.Dispose()
+func TestEngine_GetDecision(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
 	for _, data := range testData {
-		decision, err := zenEngine.GetDecision(data.file)
+		decision, err := engine.GetDecision(data.file)
 		assert.NotNil(t, decision)
 		assert.NoError(t, err)
 
@@ -126,27 +126,30 @@ func TestZenEngine_GetDecision(t *testing.T) {
 	}
 }
 
-func TestZenEngine_CreateDecision(t *testing.T) {
-	zenEngine := zen.NewEngine(readTestFile)
-	defer zenEngine.Dispose()
+func TestEngine_CreateDecision(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
 
 	fileData, err := readTestFile("8k.json")
 	assert.NoError(t, err)
 
-	decision, err := zenEngine.CreateDecision(fileData)
+	decision, err := engine.CreateDecision(fileData)
 	assert.NotNil(t, decision)
 	assert.NoError(t, err)
 
 	decision.Dispose()
 }
 
-func TestZenEngine_ErrorTransparency(t *testing.T) {
-	errorStr := "Custom error from ZenEngine"
-	zenEngine := zen.NewEngine(func(key string) ([]byte, error) {
-		return nil, errors.New(errorStr)
+func TestEngine_ErrorTransparency(t *testing.T) {
+	errorStr := "Custom error"
+	engine := zen.NewEngine(zen.EngineConfig{
+		Loader: func(key string) ([]byte, error) {
+			return nil, errors.New(errorStr)
+		},
 	})
 
-	_, err := zenEngine.Evaluate("", nil)
+	_, err := engine.Evaluate("myKey", nil)
 	assert.Error(t, err)
-	assert.Equal(t, err.Error(), errorStr)
+	assert.ErrorContains(t, err, "myKey")
+	assert.ErrorContains(t, err, errorStr)
 }
