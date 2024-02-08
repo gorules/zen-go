@@ -147,6 +147,7 @@ func TestEngine_ErrorTransparency(t *testing.T) {
 			return nil, errors.New(errorStr)
 		},
 	})
+	defer engine.Dispose()
 
 	_, err := engine.Evaluate("myKey", nil)
 	assert.Error(t, err)
