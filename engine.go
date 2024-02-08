@@ -12,7 +12,7 @@ import (
 
 type engine struct {
 	handler      cgo.Handle
-	handlerIdPtr unsafe.Pointer
+	handlerIdPtr *C.uintptr_t
 	enginePtr    *C.ZenEngineStruct
 }
 
@@ -54,13 +54,12 @@ func NewEngine(config EngineConfig) Engine {
 	}
 
 	handler := cgo.NewHandle(wrapLoader(config.Loader))
-	hid := C.uintptr_t(handler)
-	hidPtr := unsafe.Pointer(&hid)
-	enginePtr := C.zen_engine_new_with_go_loader((*C.uintptr_t)(hidPtr))
+	handlerIdPtr := C.uintptr_t(handler)
+	enginePtr := C.zen_engine_new_with_go_loader(&handlerIdPtr)
 
 	return engine{
 		handler:      handler,
-		handlerIdPtr: hidPtr,
+		handlerIdPtr: &handlerIdPtr,
 		enginePtr:    enginePtr,
 	}
 }
