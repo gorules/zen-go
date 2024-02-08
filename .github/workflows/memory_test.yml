@@ -9,7 +9,8 @@ on:
       - '**'
 
 jobs:
-  build:
+  memory_test:
+    name: Memory test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

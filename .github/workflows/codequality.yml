@@ -9,7 +9,8 @@ on:
       - '**'
 
 jobs:
-  build:
+  codequality:
+    name: Code quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
