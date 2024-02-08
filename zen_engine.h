@@ -3,89 +3,122 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef void CZenDecisionEnginePtr;
-
-typedef struct CZenDecisionLoaderResult {
-  char *content;
-  char *error;
-} CZenDecisionLoaderResult;
-
-typedef struct CZenDecisionLoaderResult (*CZenDecisionLoaderCallback)(const char *key);
-
-typedef void CZenDecisionPtr;
+typedef struct ZenDecisionStruct {
+  uint8_t _data[0];
+} ZenDecisionStruct;
 
 /**
  * CResult can be seen as Either<Result, Error>. It cannot, and should not, be initialized
  * manually. Instead, use error or ok functions for initialisation.
  */
-typedef struct CResult_CZenDecisionPtr {
-  CZenDecisionPtr *result;
-  const char *error;
-} CResult_CZenDecisionPtr;
-
-/**
- * CResult can be seen as Either<Result, Error>. It cannot, and should not, be initialized
- * manually. Instead, use error or ok functions for initialisation.
- */
-typedef struct CResult_c_char {
+typedef struct ZenResult_c_char {
   char *result;
-  const char *error;
-} CResult_c_char;
+  uint8_t error;
+  char *details;
+} ZenResult_c_char;
 
-typedef struct CZenEngineEvaluationOptions {
+typedef struct ZenEngineEvaluationOptions {
   bool trace;
   uint8_t max_depth;
-} CZenEngineEvaluationOptions;
+} ZenEngineEvaluationOptions;
+
+typedef struct ZenEngineStruct {
+  uint8_t _data[0];
+} ZenEngineStruct;
 
 /**
- * Create a new DecisionEngine instance, caller is responsible for freeing the returned reference
+ * CResult can be seen as Either<Result, Error>. It cannot, and should not, be initialized
+ * manually. Instead, use error or ok functions for initialisation.
  */
-CZenDecisionEnginePtr *zen_engine_new(void);
+typedef struct ZenResult_ZenDecisionStruct {
+  struct ZenDecisionStruct *result;
+  uint8_t error;
+  char *details;
+} ZenResult_ZenDecisionStruct;
 
 /**
- * Creates a new DecisionEngine instance with loader, caller is responsible for freeing the returned reference
+ * CResult can be seen as Either<Result, Error>. It cannot, and should not, be initialized
+ * manually. Instead, use error or ok functions for initialisation.
  */
-CZenDecisionEnginePtr *zen_engine_new_with_loader(CZenDecisionLoaderCallback callback);
+typedef struct ZenResult_c_int {
+  int *result;
+  uint8_t error;
+  char *details;
+} ZenResult_c_int;
+
+typedef struct ZenDecisionLoaderResult {
+  char *content;
+  char *error;
+} ZenDecisionLoaderResult;
+
+typedef struct ZenDecisionLoaderResult (*ZenDecisionLoaderNativeCallback)(const char *key);
 
 /**
- * Frees the DecisionEngine instance reference from the memory
+ * Frees ZenDecision
  */
-void zen_engine_free(CZenDecisionEnginePtr *engine);
+void zen_decision_free(struct ZenDecisionStruct *decision);
+
+/**
+ * Evaluates ZenDecision
+ * Caller is responsible for freeing context and ZenResult.
+ */
+struct ZenResult_c_char zen_decision_evaluate(const struct ZenDecisionStruct *decision,
+                                              const char *context_ptr,
+                                              struct ZenEngineEvaluationOptions options);
+
+/**
+ * Create a new ZenEngine instance, caller is responsible for freeing the returned reference
+ * by calling zen_engine_free.
+ */
+struct ZenEngineStruct *zen_engine_new(void);
+
+/**
+ * Frees the ZenEngine instance reference from the memory
+ */
+void zen_engine_free(struct ZenEngineStruct *engine);
 
 /**
  * Creates a Decision using a reference of DecisionEngine and content (JSON)
- * Caller is responsible for freeing: Decision reference (returned) and content_ptr
+ * Caller is responsible for freeing content and ZenResult.
  */
-struct CResult_CZenDecisionPtr zen_engine_create_decision(const CZenDecisionEnginePtr *engine_ptr,
-                                                          const char *content_ptr);
+struct ZenResult_ZenDecisionStruct zen_engine_create_decision(const struct ZenEngineStruct *engine,
+                                                              const char *content);
 
 /**
  * Evaluates rules engine using a DecisionEngine reference via loader
- * Caller is responsible for freeing: key_ptr, context_ptr and returned value
+ * Caller is responsible for freeing: key, context and ZenResult.
  */
-struct CResult_c_char zen_engine_evaluate(const CZenDecisionEnginePtr *engine_ptr,
-                                          const char *key_ptr,
-                                          const char *context_ptr,
-                                          struct CZenEngineEvaluationOptions options);
+struct ZenResult_c_char zen_engine_evaluate(const struct ZenEngineStruct *engine,
+                                            const char *key,
+                                            const char *context,
+                                            struct ZenEngineEvaluationOptions options);
 
 /**
  * Loads a Decision through DecisionEngine
- * Caller is responsible for freeing: key_ptr and returned Decision reference
+ * Caller is responsible for freeing: key and ZenResult.
  */
-struct CResult_CZenDecisionPtr zen_engine_load_decision(const CZenDecisionEnginePtr *engine_ptr,
-                                                        const char *key_ptr);
+struct ZenResult_ZenDecisionStruct zen_engine_get_decision(const struct ZenEngineStruct *engine,
+                                                           const char *key);
 
 /**
- * Evaluates rules engine using a Decision
- * Caller is responsible for freeing: content_ptr and returned value
+ * Evaluate expression, responsible for freeing expression and context
  */
-struct CResult_c_char zen_engine_decision_evaluate(const CZenDecisionPtr *decision_ptr,
-                                                   const char *context_ptr,
-                                                   struct CZenEngineEvaluationOptions options);
+struct ZenResult_c_char zen_evaluate_expression(const char *expression, const char *context);
 
-void zen_engine_decision_free(CZenDecisionPtr *decision_ptr);
+/**
+ * Evaluate unary expression, responsible for freeing expression and context
+ * True = 1
+ * False = 0
+ */
+struct ZenResult_c_int zen_evaluate_unary_expression(const char *expression, const char *context);
+
+/**
+ * Creates a new ZenEngine instance with loader, caller is responsible for freeing the returned reference
+ * by calling zen_engine_free.
+ */
+struct ZenEngineStruct *zen_engine_new_with_native_loader(ZenDecisionLoaderNativeCallback callback);
 
 /**
  * Creates a DecisionEngine for using GoLang handler (optional). Caller is responsible for freeing DecisionEngine.
  */
-CZenDecisionEnginePtr *zen_engine_new_with_go_loader(const uintptr_t *maybe_loader);
+struct ZenEngineStruct *zen_engine_new_with_go_loader(const uintptr_t *maybe_loader);
