@@ -1,0 +1,19 @@
+name: Memory test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags-ignore:
+      - '**'
+
+jobs:
+  memory_test:
+    name: Memory test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run memory leak tests
+        run: make memory_test
