@@ -156,7 +156,6 @@ func (engine engine) Dispose() {
 	C.zen_engine_free(engine.enginePtr)
 
 	if engine.handlerIdPtr != nil {
-		defer C.free(engine.handlerIdPtr)
 		engine.handler.Delete()
 	}
 }
