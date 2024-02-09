@@ -1,0 +1,476 @@
+{
+  "edges": [
+    {
+      "id": "316bbf87-527a-4297-9371-04bf64364d9f",
+      "type": "edge",
+      "sourceId": "44770982-a911-4ae5-a746-f45435342e2b",
+      "targetId": "9320e3ae-feb1-4041-9c4a-5631d1e1ce78"
+    },
+    {
+      "id": "cb14a39e-8afc-499a-954b-37d885643d8a",
+      "type": "edge",
+      "sourceId": "9320e3ae-feb1-4041-9c4a-5631d1e1ce78",
+      "targetId": "76d5310f-2c8f-4b8d-861b-cf1028d7a7c1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "44770982-a911-4ae5-a746-f45435342e2b",
+      "name": "Request",
+      "type": "inputNode",
+      "position": {
+        "x": 150,
+        "y": 330
+      }
+    },
+    {
+      "id": "9320e3ae-feb1-4041-9c4a-5631d1e1ce78",
+      "name": "decisionTableNode 1",
+      "type": "decisionTableNode",
+      "content": {
+        "rules": [
+          {
+            "_id": "5wI_skcnvo",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "QoAQvkWVYQ",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "d9SeCnBzmz",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "tY0gpnE1VG",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "RP_fp350yF",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "3V-X9VWiL7",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "5PE7bZJSPt",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "ajvI5fJT0g",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "bLqQ42Yddu",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "uvDbNlDiTZ",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "gt5-0tO9bI",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "rNJpoYXu2R",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "g35xvK0Uhp",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "fyow0Ij3yd",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "0R65tDCWe5",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "-stykUqove",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "6ZXlEG-S3N",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "0t7AO9B3LR",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "Dhzs9dGLYZ",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "V4ojUU5GdQ",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "UadZo_7DCs",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "elkUNNGyDi",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "Zkn-v2mtFg",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "4x8vb1SCKd",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "riBDyjeC0U",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "IqeW0MmNBT",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "VAVScfCfJS",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "YRdxvrLOQE",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "GwPV_T1fSG",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "YmzBD59L_v",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "ZGNdGFMlhY",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "i8zpEDkFo6",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "z61HE9JFJQ",
+            "AA6l-cCjsx": "'GB'",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "'GBP'",
+            "MekLi0Q_EA": "< 100",
+            "SGs208ovNq": "endsWith($, '@gmail.com')",
+            "Zic2WQhwse": "< 100",
+            "oq14hGDO21": "product.currency",
+            "tVwBYJCB4e": "5"
+          },
+          {
+            "_id": "kDfPGlAkGQ",
+            "AA6l-cCjsx": "",
+            "BJRjlmVMsK": "",
+            "HRNNd8No8t": "",
+            "MekLi0Q_EA": "",
+            "SGs208ovNq": "",
+            "Zic2WQhwse": "",
+            "oq14hGDO21": "\"USD\"",
+            "tVwBYJCB4e": "10"
+          }
+        ],
+        "inputs": [
+          {
+            "id": "AA6l-cCjsx",
+            "name": "Customer country",
+            "type": "expression",
+            "field": "customer.country"
+          },
+          {
+            "id": "MekLi0Q_EA",
+            "name": "Total spend",
+            "type": "expression",
+            "field": "customer.totalSpend"
+          },
+          {
+            "id": "SGs208ovNq",
+            "name": "Email",
+            "type": "expression",
+            "field": "customer.email"
+          },
+          {
+            "id": "BJRjlmVMsK",
+            "name": "Category",
+            "type": "expression",
+            "field": "product.category"
+          },
+          {
+            "id": "HRNNd8No8t",
+            "name": "Currency",
+            "type": "expression",
+            "field": "product.currency"
+          },
+          {
+            "id": "Zic2WQhwse",
+            "name": "Price",
+            "type": "expression",
+            "field": "product.price"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "tVwBYJCB4e",
+            "name": "Shipping price",
+            "type": "expression",
+            "field": "shipping.price"
+          },
+          {
+            "id": "oq14hGDO21",
+            "name": "Shipping currency",
+            "type": "expression",
+            "field": "shipping.currency"
+          }
+        ],
+        "hitPolicy": "first"
+      },
+      "position": {
+        "x": 390,
+        "y": 330
+      }
+    },
+    {
+      "id": "76d5310f-2c8f-4b8d-861b-cf1028d7a7c1",
+      "name": "Response",
+      "type": "outputNode",
+      "position": {
+        "x": 630,
+        "y": 330
+      }
+    }
+  ]
+}
