@@ -130,7 +130,7 @@ func TestEngine_CreateDecision(t *testing.T) {
 	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
 	defer engine.Dispose()
 
-	fileData, err := readTestFile("8k.json")
+	fileData, err := readTestFile("large.json")
 	assert.NoError(t, err)
 
 	decision, err := engine.CreateDecision(fileData)
