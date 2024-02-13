@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path"
+	"sync"
 	"testing"
 
 	"github.com/gorules/zen-go"
@@ -153,4 +154,31 @@ func TestEngine_ErrorTransparency(t *testing.T) {
 	assert.Error(t, err)
 	assert.ErrorContains(t, err, "myKey")
 	assert.ErrorContains(t, err, errorStr)
+}
+
+func TestEngine_EvaluateParallel(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
+
+	type responseData struct {
+		Output int `json:"output"`
+	}
+
+	var wg sync.WaitGroup
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		current := i
+		go func() {
+			defer wg.Done()
+
+			resp, err := engine.Evaluate("function.json", map[string]any{"input": current})
+			assert.NoError(t, err)
+
+			var respData responseData
+			assert.NoError(t, json.Unmarshal(resp.Result, &respData))
+			assert.Equal(t, current*2, respData.Output)
+		}()
+	}
+
+	wg.Wait()
 }
