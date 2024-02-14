@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorules/zen-go"
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
@@ -58,4 +59,35 @@ func TestDecision_Evaluate(t *testing.T) {
 		assert.Equal(t, data.outputJson, string(result))
 		decision.Dispose()
 	}
+}
+
+func TestDecision_EvaluateParallel(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	defer engine.Dispose()
+
+	type responseData struct {
+		Output int `json:"output"`
+	}
+
+	var wg sync.WaitGroup
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		current := i
+		go func() {
+			defer wg.Done()
+
+			decision, err := engine.GetDecision("function.json")
+			assert.NoError(t, err)
+			defer decision.Dispose()
+
+			resp, err := decision.Evaluate(map[string]any{"input": current})
+			assert.NoError(t, err)
+
+			var respData responseData
+			assert.NoError(t, json.Unmarshal(resp.Result, &respData))
+			assert.Equal(t, current*2, respData.Output)
+		}()
+	}
+
+	wg.Wait()
 }
