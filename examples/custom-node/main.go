@@ -25,5 +25,5 @@ func main() {
 	context := map[string]any{"a": 10}
 	r, _ := engine.Evaluate("custom-node.json", context)
 
-	fmt.Printf("[%s] Your result is: %s.", r.Performance, r.Result)
+	fmt.Printf("[%s] Your result is: %s.\n", r.Performance, r.Result)
 }
