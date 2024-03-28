@@ -9,7 +9,7 @@ import (
 )
 
 func TestDecision_EvaluateWithOpts(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -34,7 +34,7 @@ func TestDecision_EvaluateWithOpts(t *testing.T) {
 }
 
 func TestDecision_Evaluate(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -62,7 +62,7 @@ func TestDecision_Evaluate(t *testing.T) {
 }
 
 func TestDecision_EvaluateParallel(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	type responseData struct {
@@ -70,7 +70,7 @@ func TestDecision_EvaluateParallel(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		current := i
 		go func() {

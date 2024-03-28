@@ -11,15 +11,16 @@ import (
 )
 
 type engine struct {
-	handler      cgo.Handle
-	handlerIdPtr *C.uintptr_t
-	enginePtr    *C.ZenEngineStruct
+	loaderHandler          cgo.Handle
+	loaderHandlerIdPtr     *C.uintptr_t
+	customNodeHandler      cgo.Handle
+	customNodeHandlerIdPtr *C.uintptr_t
+	enginePtr              *C.ZenEngineStruct
 }
 
-type Loader func(key string) ([]byte, error)
-
 type EngineConfig struct {
-	Loader Loader
+	Loader            Loader
+	CustomNodeHandler CustomNodeHandler
 }
 
 //export zen_engine_go_loader_callback
@@ -28,40 +29,31 @@ func zen_engine_go_loader_callback(h C.uintptr_t, key *C.char) C.ZenDecisionLoad
 	return fn(key)
 }
 
-func wrapLoader(loader Loader) func(cKey *C.char) C.ZenDecisionLoaderResult {
-	return func(cKey *C.char) C.ZenDecisionLoaderResult {
-		key := C.GoString(cKey)
-		content, err := loader(key)
-		if err != nil {
-			return C.ZenDecisionLoaderResult{
-				content: nil,
-				error:   C.CString(err.Error()),
-			}
-		}
-
-		return C.ZenDecisionLoaderResult{
-			content: C.CString(string(content)),
-			error:   nil,
-		}
-	}
+//export zen_engine_go_custom_node_callback
+func zen_engine_go_custom_node_callback(h C.uintptr_t, request *C.char) C.ZenCustomNodeResult {
+	fn := cgo.Handle(h).Value().(func(*C.char) C.ZenCustomNodeResult)
+	return fn(request)
 }
 
 func NewEngine(config EngineConfig) Engine {
-	if config.Loader == nil {
-		return engine{
-			enginePtr: C.zen_engine_new(),
-		}
+	var newEngine = engine{}
+	var loaderHandlerIdPtr C.uintptr_t
+	var customNodeHandlerIdPtr C.uintptr_t
+
+	if config.Loader != nil {
+		newEngine.loaderHandler = cgo.NewHandle(wrapLoader(config.Loader))
+		loaderHandlerIdPtr = C.uintptr_t(newEngine.loaderHandler)
+		newEngine.loaderHandlerIdPtr = &loaderHandlerIdPtr
 	}
 
-	handler := cgo.NewHandle(wrapLoader(config.Loader))
-	handlerIdPtr := C.uintptr_t(handler)
-	enginePtr := C.zen_engine_new_with_go_loader(&handlerIdPtr)
-
-	return engine{
-		handler:      handler,
-		handlerIdPtr: &handlerIdPtr,
-		enginePtr:    enginePtr,
+	if config.CustomNodeHandler != nil {
+		newEngine.customNodeHandler = cgo.NewHandle(wrapCustomNodeHandler(config.CustomNodeHandler))
+		customNodeHandlerIdPtr = C.uintptr_t(newEngine.customNodeHandler)
+		newEngine.customNodeHandlerIdPtr = &customNodeHandlerIdPtr
 	}
+
+	newEngine.enginePtr = C.zen_engine_new_golang(&loaderHandlerIdPtr, &customNodeHandlerIdPtr)
+	return newEngine
 }
 
 func (engine engine) Evaluate(key string, context any) (*EvaluationResponse, error) {
@@ -155,7 +147,11 @@ func (engine engine) CreateDecision(data []byte) (Decision, error) {
 func (engine engine) Dispose() {
 	C.zen_engine_free(engine.enginePtr)
 
-	if engine.handlerIdPtr != nil {
-		engine.handler.Delete()
+	if engine.loaderHandlerIdPtr != nil {
+		engine.loaderHandler.Delete()
+	}
+
+	if engine.customNodeHandlerIdPtr != nil {
+		engine.customNodeHandler.Delete()
 	}
 }
