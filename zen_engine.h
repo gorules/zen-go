@@ -54,7 +54,7 @@ typedef struct ZenDecisionLoaderResult {
 typedef struct ZenDecisionLoaderResult (*ZenDecisionLoaderNativeCallback)(const char *key);
 
 typedef struct ZenCustomNodeResult {
-  char *content;
+  const char *content;
   char *error;
 } ZenCustomNodeResult;
 
@@ -107,9 +107,6 @@ struct ZenResult_c_char zen_engine_evaluate(const struct ZenEngineStruct *engine
 struct ZenResult_ZenDecisionStruct zen_engine_get_decision(const struct ZenEngineStruct *engine,
                                                            const char *key);
 
-/**
- * Evaluate expression, responsible for freeing expression and context
- */
 struct ZenResult_c_char zen_evaluate_expression(const char *expression, const char *context);
 
 /**
