@@ -10,23 +10,6 @@ import (
 
 type CustomNodeHandler func(request NodeRequest) (NodeResponse, error)
 
-type customNode struct {
-	ID      string            `json:"id"`
-	Name    string            `json:"name"`
-	Content customNodeContent `json:"content"`
-}
-
-type customNodeContent struct {
-	Kind   string          `json:"kind"`
-	Config json.RawMessage `json:"config"`
-}
-
-type nodeRequest struct {
-	Node      customNode      `json:"node"`
-	Input     json.RawMessage `json:"input"`
-	Iteration uint8           `json:"iteration"`
-}
-
 type CustomNode struct {
 	ID     string          `json:"id"`
 	Name   string          `json:"name"`
@@ -35,9 +18,8 @@ type CustomNode struct {
 }
 
 type NodeRequest struct {
-	Node      CustomNode      `json:"node"`
-	Input     json.RawMessage `json:"input"`
-	Iteration uint8           `json:"iteration"`
+	Node  CustomNode      `json:"node"`
+	Input json.RawMessage `json:"input"`
 }
 
 type NodeResponse struct {
@@ -49,7 +31,7 @@ func wrapCustomNodeHandler(customNodeHandler CustomNodeHandler) func(cRequest *C
 	return func(cRequest *C.char) C.ZenCustomNodeResult {
 		strRequest := C.GoString(cRequest)
 
-		var request nodeRequest
+		var request NodeRequest
 		if err := json.Unmarshal([]byte(strRequest), &request); err != nil {
 			return C.ZenCustomNodeResult{
 				content: nil,
@@ -57,16 +39,7 @@ func wrapCustomNodeHandler(customNodeHandler CustomNodeHandler) func(cRequest *C
 			}
 		}
 
-		response, err := customNodeHandler(NodeRequest{
-			Input:     request.Input,
-			Iteration: request.Iteration,
-			Node: CustomNode{
-				ID:     request.Node.ID,
-				Name:   request.Node.Name,
-				Kind:   request.Node.Content.Kind,
-				Config: request.Node.Content.Config,
-			},
-		})
+		response, err := customNodeHandler(request)
 		if err != nil {
 			return C.ZenCustomNodeResult{
 				content: nil,
