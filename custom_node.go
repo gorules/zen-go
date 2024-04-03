@@ -17,8 +17,8 @@ type customNode struct {
 }
 
 type customNodeContent struct {
-	Component string          `json:"component"`
-	Config    json.RawMessage `json:"config"`
+	Kind   string          `json:"kind"`
+	Config json.RawMessage `json:"config"`
 }
 
 type nodeRequest struct {
@@ -28,10 +28,10 @@ type nodeRequest struct {
 }
 
 type CustomNode struct {
-	ID        string          `json:"id"`
-	Name      string          `json:"name"`
-	Component string          `json:"component"`
-	Config    json.RawMessage `json:"config"`
+	ID     string          `json:"id"`
+	Name   string          `json:"name"`
+	Kind   string          `json:"kind"`
+	Config json.RawMessage `json:"config"`
 }
 
 type NodeRequest struct {
@@ -61,10 +61,10 @@ func wrapCustomNodeHandler(customNodeHandler CustomNodeHandler) func(cRequest *C
 			Input:     request.Input,
 			Iteration: request.Iteration,
 			Node: CustomNode{
-				ID:        request.Node.ID,
-				Name:      request.Node.Name,
-				Component: request.Node.Content.Component,
-				Config:    request.Node.Content.Config,
+				ID:     request.Node.ID,
+				Name:   request.Node.Name,
+				Kind:   request.Node.Content.Kind,
+				Config: request.Node.Content.Config,
 			},
 		})
 		if err != nil {

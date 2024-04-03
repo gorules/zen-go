@@ -18,7 +18,7 @@
       },
       "name": "customNode1",
       "content": {
-        "component": "add",
+        "kind": "add",
         "config": {
           "left": "{{ a + 20 }}",
           "right": 20,

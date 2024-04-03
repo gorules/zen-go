@@ -18,7 +18,7 @@
       },
       "name": "customNode1",
       "content": {
-        "component": "sum",
+        "kind": "sum",
         "config": {
           "a": "{{ a + 10 }}",
           "b": "{{ b + 5 }}",

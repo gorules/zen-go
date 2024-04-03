@@ -18,7 +18,7 @@ func readTestFile(key string) ([]byte, error) {
 }
 
 func customNodeHandler(request zen.NodeRequest) (zen.NodeResponse, error) {
-	if request.Node.Component != "sum" {
+	if request.Node.Kind != "sum" {
 		return zen.NodeResponse{}, errors.New("unknown component")
 	}
 

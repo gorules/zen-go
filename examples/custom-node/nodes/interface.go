@@ -17,7 +17,7 @@ var customNodes = map[string]NodeHandler{
 }
 
 func CustomNodeHandler(request zen.NodeRequest) (zen.NodeResponse, error) {
-	nodeHandler, ok := customNodes[request.Node.Component]
+	nodeHandler, ok := customNodes[request.Node.Kind]
 	if !ok {
 		return zen.NodeResponse{}, errors.New("component not found")
 	}

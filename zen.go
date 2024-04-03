@@ -3,14 +3,14 @@ package zen
 import "encoding/json"
 
 type EvaluationOptions struct {
-	Trace    bool
-	MaxDepth uint8
+	Trace    bool  `json:"trace"`
+	MaxDepth uint8 `json:"maxDepth"`
 }
 
 type EvaluationResponse struct {
-	Performance string
-	Result      json.RawMessage
-	Trace       *json.RawMessage
+	Performance string           `json:"performance"`
+	Result      json.RawMessage  `json:"result"`
+	Trace       *json.RawMessage `json:"trace"`
 }
 
 type Engine interface {
