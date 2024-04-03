@@ -10,7 +10,7 @@ import (
 )
 
 func EvaluateExpression[T any](expression string, context any) (T, error) {
-	jsonData, err := json.Marshal(context)
+	jsonData, err := extractJsonFromAny(context)
 	if err != nil {
 		var zero T
 		return zero, err
@@ -49,7 +49,7 @@ func EvaluateExpression[T any](expression string, context any) (T, error) {
 }
 
 func EvaluateUnaryExpression(expression string, context any) (bool, error) {
-	jsonData, err := json.Marshal(context)
+	jsonData, err := extractJsonFromAny(context)
 	if err != nil {
 		return false, err
 	}
@@ -80,7 +80,7 @@ func EvaluateUnaryExpression(expression string, context any) (bool, error) {
 }
 
 func RenderTemplate[T any](template string, context any) (T, error) {
-	jsonData, err := json.Marshal(context)
+	jsonData, err := extractJsonFromAny(context)
 	if err != nil {
 		return *new(T), err
 	}

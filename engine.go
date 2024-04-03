@@ -61,7 +61,7 @@ func (engine engine) Evaluate(key string, context any) (*EvaluationResponse, err
 }
 
 func (engine engine) EvaluateWithOpts(key string, context any, options EvaluationOptions) (*EvaluationResponse, error) {
-	jsonData, err := json.Marshal(context)
+	jsonData, err := extractJsonFromAny(context)
 	if err != nil {
 		return nil, err
 	}

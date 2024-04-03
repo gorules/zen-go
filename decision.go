@@ -25,7 +25,7 @@ func (decision decision) Evaluate(context any) (*EvaluationResponse, error) {
 }
 
 func (decision decision) EvaluateWithOpts(context any, options EvaluationOptions) (*EvaluationResponse, error) {
-	jsonData, err := json.Marshal(context)
+	jsonData, err := extractJsonFromAny(context)
 	if err != nil {
 		return nil, err
 	}
