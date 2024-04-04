@@ -74,3 +74,39 @@ func TestEvaluateUnaryExpression(t *testing.T) {
 		assert.Equal(t, testCase.output, isTrue)
 	}
 }
+
+func TestRenderTemplate(t *testing.T) {
+	type TestCase[T any] struct {
+		template string
+		output   any
+		context  any
+	}
+
+	intTestCases := []TestCase[int]{
+		{
+			template: "{{ a + b }}",
+			output:   15,
+			context:  map[string]any{"a": 5, "b": 10},
+		},
+	}
+
+	stringTestCases := []TestCase[string]{
+		{
+			template: "Hello: {{ a + b }}",
+			output:   "Hello: 15",
+			context:  map[string]any{"a": 5, "b": 10},
+		},
+	}
+
+	for _, testCase := range intTestCases {
+		isTrue, err := RenderTemplate[int](testCase.template, testCase.context)
+		assert.NoError(t, err)
+		assert.Equal(t, testCase.output, isTrue)
+	}
+
+	for _, testCase := range stringTestCases {
+		isTrue, err := RenderTemplate[string](testCase.template, testCase.context)
+		assert.NoError(t, err)
+		assert.Equal(t, testCase.output, isTrue)
+	}
+}

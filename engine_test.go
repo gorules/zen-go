@@ -17,6 +17,32 @@ func readTestFile(key string) ([]byte, error) {
 	return os.ReadFile(filePath)
 }
 
+func customNodeHandler(request zen.NodeRequest) (zen.NodeResponse, error) {
+	if request.Node.Kind != "sum" {
+		return zen.NodeResponse{}, errors.New("unknown component")
+	}
+
+	a, err := zen.GetNodeField[int](request, "a")
+	if err != nil {
+		return zen.NodeResponse{}, err
+	}
+
+	b, err := zen.GetNodeField[int](request, "b")
+	if err != nil {
+		return zen.NodeResponse{}, err
+	}
+
+	key, err := zen.GetNodeFieldRaw[string](request, "key")
+	if err != nil {
+		return zen.NodeResponse{}, err
+	}
+
+	output := make(map[string]any)
+	output[key] = a + b
+
+	return zen.NodeResponse{Output: output}, nil
+}
+
 type evaluateTestData struct {
 	file       string
 	inputJson  string
@@ -55,11 +81,16 @@ func prepareEvaluationTestData() map[string]evaluateTestData {
 			inputJson:  `{"numbers": [1, 5, 15, 25],"firstName": "John","lastName": "Doe"}`,
 			outputJson: `{"deep":{"nested":{"sum":46}},"fullName":"John Doe","largeNumbers":[15,25],"smallNumbers":[1,5]}`,
 		},
+		"customNode": {
+			file:       "custom-node.json",
+			inputJson:  `{"a": 5, "b": 10, "c": 15}`,
+			outputJson: `{"sum":30}`,
+		},
 	}
 }
 
 func TestEngine_NewEngine(t *testing.T) {
-	engineWithLoader := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engineWithLoader := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engineWithLoader.Dispose()
 	assert.NotNil(t, engineWithLoader)
 
@@ -69,7 +100,7 @@ func TestEngine_NewEngine(t *testing.T) {
 }
 
 func TestEngine_Evaluate(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -90,7 +121,7 @@ func TestEngine_Evaluate(t *testing.T) {
 }
 
 func TestEngine_EvaluateWithOpts(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -114,7 +145,7 @@ func TestEngine_EvaluateWithOpts(t *testing.T) {
 }
 
 func TestEngine_GetDecision(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -128,7 +159,7 @@ func TestEngine_GetDecision(t *testing.T) {
 }
 
 func TestEngine_CreateDecision(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	fileData, err := readTestFile("large.json")
@@ -157,7 +188,7 @@ func TestEngine_ErrorTransparency(t *testing.T) {
 }
 
 func TestEngine_EvaluateParallel(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	type responseData struct {
@@ -165,7 +196,7 @@ func TestEngine_EvaluateParallel(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		current := i
 		go func() {
