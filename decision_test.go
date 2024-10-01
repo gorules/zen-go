@@ -28,7 +28,7 @@ func TestDecision_EvaluateWithOpts(t *testing.T) {
 		result, err := output.Result.MarshalJSON()
 		assert.NoError(t, err)
 
-		assert.Equal(t, data.outputJson, string(result))
+		assert.JSONEq(t, data.outputJson, string(result))
 		decision.Dispose()
 	}
 }
@@ -56,7 +56,7 @@ func TestDecision_Evaluate(t *testing.T) {
 		result, err := output.Result.MarshalJSON()
 		assert.NoError(t, err)
 
-		assert.Equal(t, data.outputJson, string(result))
+		assert.JSONEq(t, data.outputJson, string(result))
 		decision.Dispose()
 	}
 }
