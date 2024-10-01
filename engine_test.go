@@ -116,7 +116,7 @@ func TestEngine_Evaluate(t *testing.T) {
 		result, err := output.Result.MarshalJSON()
 		assert.NoError(t, err)
 
-		assert.Equal(t, data.outputJson, string(result))
+		assert.JSONEq(t, data.outputJson, string(result))
 	}
 }
 
@@ -140,7 +140,7 @@ func TestEngine_EvaluateWithOpts(t *testing.T) {
 		result, err := output.Result.MarshalJSON()
 		assert.NoError(t, err)
 
-		assert.Equal(t, data.outputJson, string(result))
+		assert.JSONEq(t, data.outputJson, string(result))
 	}
 }
 
