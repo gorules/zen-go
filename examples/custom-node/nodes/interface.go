@@ -2,7 +2,7 @@ package nodes
 
 import (
 	"errors"
-	"github.com/gorules/zen-go"
+	"github.com/gorules/zen-go/v2"
 )
 
 type NodeHandler interface {

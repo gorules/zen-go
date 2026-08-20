@@ -5,6 +5,8 @@ import "C"
 
 type Loader func(key string) ([]byte, error)
 
+func (Loader) engineLoader() {}
+
 func wrapLoader(loader Loader) func(cKey *C.char) C.ZenDecisionLoaderResult {
 	return func(cKey *C.char) C.ZenDecisionLoaderResult {
 		key := C.GoString(cKey)

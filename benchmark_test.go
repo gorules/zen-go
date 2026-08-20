@@ -1,13 +1,13 @@
 package zen_test
 
 import (
-	"github.com/gorules/zen-go"
+	"github.com/gorules/zen-go/v2"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func BenchmarkEngine(b *testing.B) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	context := map[string]any{"input": 5}
@@ -18,7 +18,7 @@ func BenchmarkEngine(b *testing.B) {
 }
 
 func BenchmarkDecision(b *testing.B) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	decision, err := engine.GetDecision("table.json")
@@ -33,7 +33,7 @@ func BenchmarkDecision(b *testing.B) {
 }
 
 func BenchmarkDecisionCustomNode(b *testing.B) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	decision, err := engine.GetDecision("custom-node.json")
