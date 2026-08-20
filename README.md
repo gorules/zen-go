@@ -12,7 +12,7 @@ An open-source React editor is available on our [JDM Editor](https://github.com/
 ## Installation
 
 ```bash
-go get github.com/gorules/zen-go
+go get github.com/gorules/zen-go/v2
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ func readTestFile(key string) ([]byte, error) {
 }
 
 func main() {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile)})
 	defer engine.Dispose() // Call to avoid leaks
 
 	output, err := engine.Evaluate("rule.json", map[string]any{})
@@ -49,6 +49,26 @@ func main() {
 }
 
 ```
+
+### Loader Configurations
+
+`EngineConfig.Loader` accepts either a loader callback wrapped in `zen.Loader` (as above) or a loader configuration of a
+known type. With a configuration, decisions are pre-loaded and pre-compiled at engine creation for
+faster evaluations.
+
+```go
+engine := zen.NewEngine(zen.EngineConfig{Loader: zen.FilesystemLoader{Path: "test-data"}})
+
+engine := zen.NewEngine(zen.EngineConfig{Loader: zen.StaticLoader{
+	Content: map[string]json.RawMessage{"rule.json": ruleJson},
+}})
+
+engine := zen.NewEngine(zen.EngineConfig{Loader: zen.ZipLoader{Bytes: zipBytes}})
+```
+
+If the loader configuration is invalid (e.g. corrupted zip bytes), the error is returned by the
+first call to `Evaluate`, `GetDecision` or `CreateDecision`.
+
 For more details on rule format and advanced usage, take a look at the [Documentation](https://gorules.io/docs/developers/bre/engines/go).
 
 ### Supported Platforms
@@ -278,13 +298,6 @@ observed in a table. Conversely, under a collect hit policy, the graph extends t
 true, allowing branching to multiple paths.
 
 Note: If there are multiple edges from the same condition, there is no guaranteed order of execution.
-
-*Available from:*
-
-* Python 0.16.0
-* NodeJS 0.13.0
-* Rust 0.16.0
-* Go 0.1.0
 
 ### Functions Node
 

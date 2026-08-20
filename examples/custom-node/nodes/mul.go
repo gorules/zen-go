@@ -1,6 +1,6 @@
 package nodes
 
-import "github.com/gorules/zen-go"
+import "github.com/gorules/zen-go/v2"
 
 type mulNode struct {
 }

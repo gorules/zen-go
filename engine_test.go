@@ -1,6 +1,8 @@
 package zen_test
 
 import (
+	"archive/zip"
+	"bytes"
 	"encoding/json"
 	"errors"
 	"github.com/stretchr/testify/assert"
@@ -9,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/gorules/zen-go"
+	"github.com/gorules/zen-go/v2"
 )
 
 func readTestFile(key string) ([]byte, error) {
@@ -90,7 +92,7 @@ func prepareEvaluationTestData() map[string]evaluateTestData {
 }
 
 func TestEngine_NewEngine(t *testing.T) {
-	engineWithLoader := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engineWithLoader := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engineWithLoader.Dispose()
 	assert.NotNil(t, engineWithLoader)
 
@@ -100,7 +102,7 @@ func TestEngine_NewEngine(t *testing.T) {
 }
 
 func TestEngine_Evaluate(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -121,7 +123,7 @@ func TestEngine_Evaluate(t *testing.T) {
 }
 
 func TestEngine_EvaluateWithOpts(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -145,7 +147,7 @@ func TestEngine_EvaluateWithOpts(t *testing.T) {
 }
 
 func TestEngine_GetDecision(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -159,7 +161,7 @@ func TestEngine_GetDecision(t *testing.T) {
 }
 
 func TestEngine_CreateDecision(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	fileData, err := readTestFile("large.json")
@@ -175,9 +177,9 @@ func TestEngine_CreateDecision(t *testing.T) {
 func TestEngine_ErrorTransparency(t *testing.T) {
 	errorStr := "Custom error"
 	engine := zen.NewEngine(zen.EngineConfig{
-		Loader: func(key string) ([]byte, error) {
+		Loader: zen.Loader(func(key string) ([]byte, error) {
 			return nil, errors.New(errorStr)
-		},
+		}),
 	})
 	defer engine.Dispose()
 
@@ -188,7 +190,7 @@ func TestEngine_ErrorTransparency(t *testing.T) {
 }
 
 func TestEngine_EvaluateParallel(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	type responseData struct {
@@ -212,4 +214,115 @@ func TestEngine_EvaluateParallel(t *testing.T) {
 	}
 
 	wg.Wait()
+}
+
+func TestEngine_NewEngineWithStaticLoader(t *testing.T) {
+	tableContent, err := readTestFile("table.json")
+	assert.NoError(t, err)
+
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.StaticLoader{
+		Content: map[string]json.RawMessage{"table.json": tableContent},
+	}})
+	defer engine.Dispose()
+
+	output, err := engine.Evaluate("table.json", map[string]any{"input": 15})
+	assert.NoError(t, err)
+	assert.JSONEq(t, `{"output":10}`, string(output.Result))
+
+	_, err = engine.Evaluate("missing.json", map[string]any{})
+	assert.Error(t, err)
+}
+
+func TestEngine_NewEngineWithFilesystemLoader(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.FilesystemLoader{Path: "test-data"}})
+	defer engine.Dispose()
+
+	output, err := engine.Evaluate("table.json", map[string]any{"input": 15})
+	assert.NoError(t, err)
+	assert.JSONEq(t, `{"output":10}`, string(output.Result))
+}
+
+func TestEngine_NewEngineWithZipLoader(t *testing.T) {
+	tableContent, err := readTestFile("table.json")
+	assert.NoError(t, err)
+
+	var buffer bytes.Buffer
+	writer := zip.NewWriter(&buffer)
+	file, err := writer.Create("table.json")
+	assert.NoError(t, err)
+	_, err = file.Write(tableContent)
+	assert.NoError(t, err)
+	assert.NoError(t, writer.Close())
+
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.ZipLoader{Bytes: buffer.Bytes()}})
+	defer engine.Dispose()
+
+	output, err := engine.Evaluate("table.json", map[string]any{"input": 15})
+	assert.NoError(t, err)
+	assert.JSONEq(t, `{"output":10}`, string(output.Result))
+}
+
+func TestEngine_NewEngineWithLoaderConfigCustomNode(t *testing.T) {
+	customNodeContent, err := readTestFile("custom-node.json")
+	assert.NoError(t, err)
+
+	engine := zen.NewEngine(zen.EngineConfig{
+		Loader: zen.StaticLoader{
+			Content: map[string]json.RawMessage{"custom-node.json": customNodeContent},
+		},
+		CustomNodeHandler: customNodeHandler,
+	})
+	defer engine.Dispose()
+
+	output, err := engine.Evaluate("custom-node.json", map[string]any{"a": 5, "b": 10, "c": 15})
+	assert.NoError(t, err)
+	assert.JSONEq(t, `{"sum":30}`, string(output.Result))
+}
+
+func TestEngine_NewEngineWithInvalidZipLoader(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.ZipLoader{Bytes: []byte{1, 2, 3, 4}}})
+	defer engine.Dispose()
+
+	_, err := engine.Evaluate("table.json", map[string]any{"input": 15})
+	assert.Error(t, err)
+}
+
+func TestEngine_NewEngineWithTypedLoaderCallback(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile)})
+	defer engine.Dispose()
+
+	output, err := engine.Evaluate("table.json", map[string]any{"input": 15})
+	assert.NoError(t, err)
+	assert.JSONEq(t, `{"output":10}`, string(output.Result))
+}
+
+func TestEngine_EvaluateBatch(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.FilesystemLoader{Path: "test-data"}})
+	defer engine.Dispose()
+
+	results, err := engine.EvaluateBatch([]zen.EvaluateBatchRequest{
+		{Key: "table.json", Context: map[string]any{"input": 15}},
+		{Key: "missing.json", Context: map[string]any{}},
+		{Key: "table.json", Context: map[string]any{"input": 5}},
+	})
+	assert.NoError(t, err)
+	assert.Len(t, results, 3)
+
+	assert.True(t, results[0].Success)
+	assert.JSONEq(t, `{"output":10}`, string(results[0].Data.Result))
+
+	assert.False(t, results[1].Success)
+	assert.NotEmpty(t, results[1].Error)
+
+	assert.True(t, results[2].Success)
+	assert.JSONEq(t, `{"output":0}`, string(results[2].Data.Result))
+}
+
+func TestEngine_EvaluateBatchEmpty(t *testing.T) {
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.FilesystemLoader{Path: "test-data"}})
+	defer engine.Dispose()
+
+	results, err := engine.EvaluateBatch(nil)
+	assert.NoError(t, err)
+	assert.Empty(t, results)
 }

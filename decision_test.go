@@ -2,14 +2,14 @@ package zen_test
 
 import (
 	"encoding/json"
-	"github.com/gorules/zen-go"
+	"github.com/gorules/zen-go/v2"
 	"github.com/stretchr/testify/assert"
 	"sync"
 	"testing"
 )
 
 func TestDecision_EvaluateWithOpts(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -34,7 +34,7 @@ func TestDecision_EvaluateWithOpts(t *testing.T) {
 }
 
 func TestDecision_Evaluate(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	testData := prepareEvaluationTestData()
@@ -62,7 +62,7 @@ func TestDecision_Evaluate(t *testing.T) {
 }
 
 func TestDecision_EvaluateParallel(t *testing.T) {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: customNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: customNodeHandler})
 	defer engine.Dispose()
 
 	type responseData struct {

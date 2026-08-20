@@ -3,8 +3,8 @@ package main
 import (
 	"embed"
 	"fmt"
-	"github.com/gorules/zen-go"
-	"github.com/gorules/zen-go/examples/custom-node/nodes"
+	"github.com/gorules/zen-go/v2"
+	"github.com/gorules/zen-go/v2/examples/custom-node/nodes"
 	"path"
 )
 
@@ -21,7 +21,7 @@ func readTestFile(key string) ([]byte, error) {
 }
 
 func main() {
-	engine := zen.NewEngine(zen.EngineConfig{Loader: readTestFile, CustomNodeHandler: nodes.CustomNodeHandler})
+	engine := zen.NewEngine(zen.EngineConfig{Loader: zen.Loader(readTestFile), CustomNodeHandler: nodes.CustomNodeHandler})
 	context := map[string]any{"a": 10}
 	r, _ := engine.Evaluate("custom-node.json", context)
 
